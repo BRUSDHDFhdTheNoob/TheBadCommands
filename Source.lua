@@ -41,7 +41,7 @@ local IsOpen = false
 
 local function getCurrentVersion()
 	-- Code to retrieve the current version dynamically
-	return "1.3.1"
+	return "1.3.2"
 end
 
 function setUp()
@@ -292,8 +292,7 @@ local commands = {
 		local WINDOW_WIDTH = 300
 		local WINDOW_HEIGHT = 400
 		local WINDOW_PADDING = 10
-
-		local keycode = Enum.KeyCode.T
+		local OPEN_KEY = Enum.KeyCode.T
 
 		-- Create UI elements
 		local ScreenGui = Instance.new("ScreenGui")
@@ -334,8 +333,6 @@ local commands = {
 
 		local isOpen = true
 
-		local info = TweenInfo.new(1,Enum.EasingStyle.Quart)
-
 		-- Define functions
 		local function CreateChildrenFrame(parent)
 			if not parent:GetChildren()[1] then
@@ -347,18 +344,19 @@ local commands = {
 			ChildrenFrame.Size = UDim2.new(0, 248, 0, 10)
 			ChildrenFrame.Parent = parent
 
-			for _, child in ipairs(game:GetDescendants():GetChildren()) do
-				if child.Name == parent.Name then
+			for _, child in ipairs(game:GetDescendants()) do
+				if child:IsDescendantOf(parent) and child ~= parent then
 					local Item = Template:Clone()
 					Item.Text = child.Name
 					Item.Parent = ChildrenFrame
-	
+
 					local Tween = game.TweenService:Create(Item, TweenInfo.new(1, Enum.EasingStyle.Exponential), { Size = UDim2.new(0, 248, 0, 25) })
 					Tween:Play()
 
 					spawn(function()
 						CreateChildrenFrame(Item)
 					end)
+
 					wait(0.2)
 				end
 			end
@@ -392,17 +390,17 @@ local commands = {
 		end
 
 		function DexExplorer:Open()
-			local tween = game.TweenService:Create(Frame,info,{Size = UDim2.new(0, WINDOW_WIDTH, 0, WINDOW_HEIGHT)})
+			local tween = game.TweenService:Create(Frame, TweenInfo.new(1, Enum.EasingStyle.Quart), { Size = UDim2.new(0, WINDOW_WIDTH, 0, WINDOW_HEIGHT) })
 			tween:Play()
 		end
 
 		function DexExplorer:Close()
-			local tween = game.TweenService:Create(Frame,info,{Size = UDim2.new(0, WINDOW_WIDTH, 0, 0)})
+			local tween = game.TweenService:Create(Frame, TweenInfo.new(1, Enum.EasingStyle.Quart), { Size = UDim2.new(0, WINDOW_WIDTH, 0, 0) })
 			tween:Play()
 		end
 
-		game.UserInputService.InputBegan:Connect(function(i)
-			if i.KeyCode == keycode then
+		game.UserInputService.InputBegan:Connect(function(input)
+			if input.KeyCode == OPEN_KEY then
 				if isOpen then
 					DexExplorer:Close()
 				else
@@ -419,7 +417,6 @@ local commands = {
 		-- Usage example
 		DexExplorer:CreateExplorer()
 		DexExplorer:Show()
-
 	end
 }
 
