@@ -1,3 +1,10 @@
+--[[
+	version updating
+	+0.1 to 0.5 - small updates
+	+0.6 to 1 - medium updates
+	+1.1 to 1.5 - big updates
+]]
+
 if not game.Loaded then
 	game.Loaded:Wait()
 end
