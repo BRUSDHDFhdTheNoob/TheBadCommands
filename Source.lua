@@ -41,7 +41,7 @@ local IsOpen = false
 
 local function getCurrentVersion()
 	-- Code to retrieve the current version dynamically
-	return "1.3.0"
+	return "1.3.1"
 end
 
 function setUp()
@@ -344,21 +344,23 @@ local commands = {
 
 			local ChildrenFrame = Instance.new("Frame")
 			ChildrenFrame.Position = UDim2.new(0.068, 0, 1, 0)
-			ChildrenFrame.Size = UDim2.new(0, 248, 0, 0)
+			ChildrenFrame.Size = UDim2.new(0, 248, 0, 10)
 			ChildrenFrame.Parent = parent
 
-			for _, child in ipairs(parent:GetChildren()) do
-				local Item = Template:Clone()
-				Item.Text = child.Name
-				Item.Parent = ChildrenFrame
+			for _, child in ipairs(game:GetDescendants():GetChildren()) do
+				if child.Name == parent.Name then
+					local Item = Template:Clone()
+					Item.Text = child.Name
+					Item.Parent = ChildrenFrame
+	
+					local Tween = game.TweenService:Create(Item, TweenInfo.new(1, Enum.EasingStyle.Exponential), { Size = UDim2.new(0, 248, 0, 25) })
+					Tween:Play()
 
-				local Tween = game.TweenService:Create(Item, TweenInfo.new(1, Enum.EasingStyle.Exponential), { Size = UDim2.new(0, 248, 0, 25) })
-				Tween:Play()
-
-				spawn(function()
-					CreateChildrenFrame(Item)
-				end)
-				wait(0.2)
+					spawn(function()
+						CreateChildrenFrame(Item)
+					end)
+					wait(0.2)
+				end
 			end
 		end
 
