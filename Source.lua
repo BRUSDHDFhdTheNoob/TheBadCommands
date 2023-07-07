@@ -8,7 +8,7 @@ if not getfenv().Gui then
 	Gui = Instance.new("ScreenGui")
 	getfenv().Gui = Gui
 else
-	Gui:Destroy()
+	getfenv().Gui:Destroy()
 	getfenv().Gui = Instance.new("ScreenGui")
 end
 
@@ -41,7 +41,7 @@ local IsOpen = false
 
 local function getCurrentVersion()
 	-- Code to retrieve the current version dynamically
-	return "1.3.2"
+	return "1.3.3"
 end
 
 function setUp()
